@@ -1,0 +1,38 @@
+package com.capgemini.libraryManagementSystemJdbc.dao;
+
+import com.capgemini.libraryManagementSystemJdbc.dto.AdminInfo;
+import com.capgemini.libraryManagementSystemJdbc.dto.BooksInfo;
+
+public class UserDAOImplementation implements UserDAO{
+
+	public AdminInfo auth(String name, String password) {
+
+		return null;
+	}
+
+	public boolean registerAdmin(AdminInfo ai) {
+		
+		return false;
+	}
+
+	public boolean addBook(BooksInfo bi) {
+		
+		return false;
+	}
+
+	public boolean removeBook(int bid) {
+		
+		return false;
+	}
+
+	public boolean issueBook(int bid) {
+		
+		return false;
+	}
+
+	public BooksInfo searchBook(int bid) {
+		
+		return null;
+	}
+
+}

@@ -1,0 +1,356 @@
+package com.capgemini.librarymanagementsystem.controller;
+
+import java.util.Scanner;
+
+import com.capgemini.librarymanagementsystem.dto.AdminInfo;
+import com.capgemini.librarymanagementsystem.dto.BooksInfo;
+import com.capgemini.librarymanagementsystem.factory.Factory;
+import com.capgemini.librarymanagementsystem.service.AdminService;
+
+public class LibraryMain {
+public static void main(String[] args) {
+	doReg();
+}
+
+		public static void doReg() {
+			Scanner scanner = new Scanner(System.in);
+			do {
+				System.out.println("Press 1 to Admin");
+				System.out.println("Press 2 to User");
+
+				int i = scanner.nextInt();
+				switch(i) {
+				case 1:
+					AdminService service1=Factory.getAdminService();
+					do{
+						System.out.println("Press 1 to Admin Register");
+						System.out.println("Press 2 to Login");
+						System.out.println("Press 3 to exit");
+						int choice = scanner.nextInt();
+						switch (choice) {
+						case 1:
+							System.out.println("enter id");
+							int regId=scanner.nextInt();
+							System.out.println("enter name");
+							String regName=scanner.next();
+							System.out.println("enter password");
+							String regPassword=scanner.next();
+							AdminInfo ai=new AdminInfo();
+							ai.setAid(regId);
+							ai.setAname(regName);
+							ai.setApassword(regPassword);
+							boolean check=service1.registerAdmin(ai);
+							if(check)
+								System.out.println("Registered");
+							else
+								System.out.println("Already user is registered");
+							break;
+							
+						case 2:
+							System.out.println("enter id");
+							int id=scanner.nextInt();
+							System.out.println("enter name");
+							String name=scanner.next();
+							System.out.println("enter password");
+							String password=scanner.next();
+							
+							try {
+							AdminInfo authInfo=service1.auth(name, password);
+							System.out.println("Logged In");
+							
+							System.out.println("Press 1 to add book");
+							System.out.println("Press 2 to remove book");
+							System.out.println("Press 3 to issue book");
+							System.out.println("Press 4 to search book");
+							System.out.println("Press 5 to log out");
+							
+							    int choice1 = scanner.nextInt();
+								switch (choice1) {
+								case 1:
+									System.out.println("enter id");
+									int addId=scanner.nextInt();
+									System.out.println("enter bookname");
+									String addName=scanner.next();
+									System.out.println("enter authorname");
+									String addAuth=scanner.next();
+									System.out.println("enter publisher");
+									String addPublisher=scanner.next();
+									BooksInfo bi=new BooksInfo();
+									bi.setBookid(addId);
+									bi.setBookname(addName);
+									bi.setAuthorname(addAuth);
+									bi.setPublisher(addPublisher);
+									boolean check2=service1.addBook(bi);
+									if(check2) 
+										System.out.println("Added Book");
+									else
+										System.out.println("Book not added");
+									break;	
+								case 2:
+									System.out.println("enter id");
+									int removeId=scanner.nextInt();
+									boolean check3=service1.removeBook(removeId);
+									if(check3)
+										System.out.println("Removed Book");
+									else
+										System.out.println("Book not removed");
+									break;
+									
+								case 3:
+									System.out.println("enter id");
+									int issueId=scanner.nextInt();
+									boolean check4=service1.issueBook(issueId);
+									if(check4)
+										System.out.println("Book Issued");
+									else
+										System.out.println("Book not issued");
+									break;
+									
+								case 4:
+									System.out.println("enter id");
+									int searchId=scanner.nextInt();
+									try {
+									BooksInfo bi2=service1.searchBook(searchId);
+									System.out.println("Book searched");
+									}catch(Exception e) {
+									System.out.println("Invalid credentials");	
+									}
+									break;
+									
+								case 5:
+									System.out.println("Search the book by the Book_Id's :");
+									String bids = scanner.next();
+
+									BookBean bean5 = new BookBean();
+									bean5.setAuthor(bids);
+									List<BookBean> bookIds = service.searchBookAuthor(bids);
+									for (BookBean bookBean : bookIds) {
+										if (bookBean != null) {
+											System.out.println("Book_Id is-->"+bookBean.getId()
+											+"Book_Name is-->"+bookBean.getName()
+											+"Book_Author is-->"+bookBean.getAuthor()
+											+"Book_Category is-->"+bookBean.getCategory()
+											+"Book_PublisherName is-->"+bookBean.getPublishername());
+										} else {
+											System.out.println("No books are available with this Id.");
+										}
+									}
+									break;
+								case 6:
+									System.out.println("Enter the book_Id:");
+									int book_Id = scanner.nextInt();
+									if (book_Id == 0) {
+										System.out.println("Enter the Valid Book_Id");
+									} else {
+										BookBean bean6 = new BookBean();
+										bean6.setId(book_Id);
+										boolean remove = service.delete(book_Id);
+										if (remove) {
+											System.out.println("The Book is removed");
+										} else {
+											System.out.println("The Book is not removed");
+										}
+									}
+									break;
+								case 7:
+									LinkedList<Integer> ids = service.getBookIds();
+									for (Integer integer : ids) {
+
+										if (integer != null) {
+											System.out.println(integer);
+										} else {
+											System.out.println("No Books Ids are available");
+										}
+									}
+									break;
+								case 8:
+									LinkedList<BookBean> info = service.getBooksInfo();
+									for (BookBean bookBean : info) {
+
+										if (bookBean != null) {
+											System.out.println(bookBean);
+										} else {
+											System.out.println("Books info is not presernt");
+										}
+									}
+									break;
+								case 9:
+									doReg();
+								default:
+									System.out.println("Invalid Choice");
+									break;
+								}
+							} catch (Exception e) {
+								System.out.println("Invalid Credentials");
+							}
+
+							break;
+						case 3:
+							doReg();
+							break;
+						default:
+							System.out.println("Invalid Choice");
+							break;
+						}
+					} while(true);
+
+				case 2:
+					StudentService service1 = StudentFactory.getStudentService();
+					do {
+						System.out.println("Press 1 to Student Register");
+						System.out.println("Press 2 to Login");
+						System.out.println("3 to main");
+						int choice = scanner.nextInt();
+						switch (choice) {
+						case 1:
+							System.out.println("Enter ID");
+							String regID = scanner.next();
+							System.out.println("Enter Name");
+							String regName = scanner.next();
+							System.out.println("Enter Mobile");
+							long regMobile = scanner.nextLong();
+							System.out.println("Enter Email");
+							String regEmail = scanner.next();
+							System.out.println("Enter Password");
+							String regPassword = scanner.next();
+
+							StudentBean bean = new StudentBean();
+							bean.setId(regID);
+							bean.setName(regName);
+							bean.setMobile(regMobile);
+							bean.setEmail(regEmail);
+							bean.setPassword(regPassword);
+							boolean check = service1.register(bean);
+							if(check) {
+								System.out.println("Registered");
+							} else {
+								System.out.println("Email already exist");
+							}
+							break;
+						case 2:
+							System.out.println("Enter email");
+							String email = scanner.next();
+							System.out.println("Enter Password");
+							String password = scanner.next();
+							try {
+								StudentBean studentBean = service1.auth(email, password);
+								System.out.println("Logged in");
+
+								System.out.println("Press 1 to Search the Book by Author");
+								System.out.println("Press 2 to Search the Book by Title");
+								System.out.println("Press 3 to Search the Book by Id");
+								System.out.println("Press 4 to Get the Book Id's");
+								System.out.println("Press 5 to Get the Book Information");
+								System.out.println("Press 6 to main");
+
+
+								int choice2 = scanner.nextInt();
+								switch (choice2) {
+								case 1:
+									System.out.println("Search the book by the Author Name :");
+									String author = scanner.next();
+
+									BookBean bean3 = new BookBean();
+									bean3.setAuthor(author);
+									List<BookBean> bookauthor = service1.searchBookAuthor(author);
+									for (BookBean bookBean : bookauthor) {
+
+										if (bookBean != null) {
+											System.out.println("Book_Id is-->"+bookBean.getId()
+											+"Book_Name is-->"+bookBean.getName()
+											+"Book_Author is-->"+bookBean.getAuthor()
+											+"Book_Category is-->"+bookBean.getCategory()
+											+"Book_PublisherName is-->"+bookBean.getPublishername());
+										} else {
+											System.out.println("No books are available written by this author");
+										}
+									}
+									break;
+								case 2:
+									System.out.println("Search the book by the Book_Title :");
+									String btitle = scanner.next();
+
+									BookBean bean4 = new BookBean();
+									bean4.setAuthor(btitle);
+									List<BookBean> booktitle = service1.searchBookAuthor(btitle);
+									for (BookBean bookBean : booktitle) {	
+										if (bookBean != null) {
+											System.out.println("Book_Id is-->"+bookBean.getId()
+											+"Book_Name is-->"+bookBean.getName()
+											+"Book_Author is-->"+bookBean.getAuthor()
+											+"Book_Category is-->"+bookBean.getCategory()
+											+"Book_PublisherName is-->"+bookBean.getPublishername());
+										} else {
+											System.out.println("No books are available with this title.");
+										}
+									}
+									break;
+								case 3:
+									System.out.println("  Search the book by the Book_Id's :");
+									String bids = scanner.next();
+
+									BookBean bean5 = new BookBean();
+									bean5.setAuthor(bids);
+									List<BookBean> bookIds = service1.searchBookAuthor(bids);
+									for (BookBean bookBean : bookIds) {
+										if (bookBean != null) {
+											System.out.println("Book_Id is-->"+bookBean.getId()
+											+"Book_Name is-->"+bookBean.getName()
+											+"Book_Author is-->"+bookBean.getAuthor()
+											+"Book_Category is-->"+bookBean.getCategory()
+											+"Book_PublisherName is-->"+bookBean.getPublishername());
+										} else {
+											System.out.println("No books are available with this Id.");
+										}
+									}
+									break;
+								case 4:
+									LinkedList<Integer> ids = service1.getBookIds();
+									for (Integer integer : ids) {
+
+										if (integer != null) {
+											System.out.println(integer);
+										} else {
+											System.out.println("No Books Ids are available");
+										}
+									}
+									break;
+								case 5:
+									LinkedList<BookBean> info = service1.getBooksInfo();
+									for (BookBean bookBean : info) {
+
+										if (bookBean != null) {
+											System.out.println(bookBean);
+										} else {
+											System.out.println("Books info is not presernt");
+										}
+									}
+									break;
+
+								case 6:
+									doReg();
+								default:
+									break;
+								}
+							} catch (Exception e) {
+								System.out.println("Invalid Credentials");
+							}
+							break;
+
+						case 3:
+							doReg();
+						default:
+							System.out.println("Invalid Choice");
+							break;
+						}
+					} while(true);
+				}
+			}while(true);
+
+
+		}
+	}
+	
+	
+}
+}

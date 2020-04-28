@@ -1,0 +1,5 @@
+package com.capgemini.libraryManagementSystemJdbc.dto;
+
+public class UserInfo {
+
+}

@@ -1,0 +1,111 @@
+package com.capgemini.librarymanagementsystem.dao;
+
+
+
+import java.util.LinkedList;
+
+import com.capgemini.librarymanagementsystem.db.LibraryDB;
+import com.capgemini.librarymanagementsystem.dto.AdminInfo;
+import com.capgemini.librarymanagementsystem.dto.BooksInfo;
+import com.capgemini.librarymanagementsystem.dto.UserInfo;
+import com.capgemini.librarymanagementsystem.exception.CommonException;
+
+public class AdminDAOImplementation implements AdminDAO{
+
+	@Override
+	public AdminInfo auth(String aname, String apassword) {
+		for(AdminInfo ai: LibraryDB.ADMIN) {
+		if(ai.getAname().equals(aname) && ai.getApassword().equals(apassword)) {
+		return ai;	
+		}
+		}
+		throw new CommonException("Invalid Credentials");
+	}
+
+	@Override
+	public boolean registerAdmin(AdminInfo ai) {
+		for(AdminInfo ai1 : LibraryDB.ADMIN) {
+		if(ai1.getAname().equals(ai.getAname())) {
+		return false;
+	}
+		}
+		LibraryDB.ADMIN.add(ai);
+		return true;
+	}
+
+	@Override
+	public boolean addBook(BooksInfo bi) {
+		for(BooksInfo bi1 : LibraryDB.BOOKS) {
+			if(bi1.getBid()==bi.getBid()) {
+				return false;
+			}
+		}
+		LibraryDB.BOOKS.add(bi);
+		return true;
+	}
+
+	@Override
+	public boolean removeBook(int bid) {
+		for(BooksInfo bi : LibraryDB.BOOKS) {
+			if(bi.getBid()==bid) {
+				//LibraryDB.BOOKS.remove(bid);
+				return true;	
+		}
+		}
+		throw new CommonException("Book id is not available");
+	}
+
+	@Override
+	public boolean issueBook(int bid) {
+		
+		boolean bookPresent=LibraryDB.BOOKS.contains(bid);
+		UserInfo ui=new UserInfo();
+		int booksBorrowed = ui.getNoOfBooks();
+		if(bookPresent) {
+			if(booksBorrowed<=3) {
+				
+				for(BooksInfo bi : LibraryDB.BOOKS) {
+					if(bi.getBid()==bid) {
+						booksBorrowed++;
+						ui.setNoOfBooks(booksBorrowed);
+					}	
+					return true;
+			}
+				}
+		}
+		return false;
+	}
+
+	/*
+	 * @Override public BooksInfo searchBook(int bid) { for(BooksInfo bi :
+	 * LibraryDB.BOOKS) { if(bi.getBid()==bid) { return bi; } } throw new
+	 * CommonException("Book Not Found"); }
+	 */
+
+	@Override
+	public LinkedList<BooksInfo> searchBookByTitle(String bname) {
+		
+		return null;
+	}
+
+	@Override
+	public LinkedList<BooksInfo> searchBookByAuthor(String bauthor) {
+		
+		return null;
+	}
+
+	
+
+	@Override
+	public LinkedList<BooksInfo> getBooksInfo() {
+		
+		return null;
+	}
+
+	@Override
+	public boolean updateBook(BooksInfo bi) {
+		
+		return false;
+	}
+
+}

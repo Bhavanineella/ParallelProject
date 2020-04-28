@@ -1,0 +1,252 @@
+package com.capgemini.librarymanagementsystem.controller;
+
+import java.util.Scanner;
+
+import com.capgemini.librarymanagementsystem.dto.AdminInfo;
+import com.capgemini.librarymanagementsystem.dto.BooksInfo;
+import com.capgemini.librarymanagementsystem.dto.UserInfo;
+import com.capgemini.librarymanagementsystem.factory.Factory;
+import com.capgemini.librarymanagementsystem.service.AdminService;
+import com.capgemini.librarymanagementsystem.service.UserService;
+
+public class LibraryMain {
+public static void main(String[] args) {
+	doReg();
+}
+
+ public static void doReg() {
+			Scanner scanner = new Scanner(System.in);
+			do {
+				System.out.println("Press 1 to Admin");
+				System.out.println("Press 2 to User");
+
+				int i = scanner.nextInt();
+				switch(i) {
+				case 1:
+					AdminService service1=Factory.getAdminService();
+					do{
+						System.out.println("Press 1 to Admin Register");
+						System.out.println("Press 2 to Login");
+						System.out.println("Press 3 to exit");
+						int choice = scanner.nextInt();
+						switch (choice) {
+						case 1:
+							System.out.println("enter id");
+							int regId=scanner.nextInt();
+							System.out.println("enter name");
+							String regName=scanner.next();
+							System.out.println("enter password");
+							String regPassword=scanner.next();
+							AdminInfo ai=new AdminInfo();
+							ai.setAid(regId);
+							ai.setAname(regName);
+							ai.setApassword(regPassword);
+							boolean check=service1.registerAdmin(ai);
+							if(check)
+								System.out.println("Registered");
+							else
+								System.out.println("Already user is registered");
+							break;
+							
+						case 2:
+							do {
+							System.out.println("enter id");
+							int id=scanner.nextInt();
+							System.out.println("enter name");
+							String name=scanner.next();
+							System.out.println("enter password");
+							String password=scanner.next();
+							
+							try {
+							AdminInfo authInfo=service1.auth(name, password);
+							System.out.println("Logged In");
+							
+							System.out.println("Press 1 to add book");
+							System.out.println("Press 2 to remove book");
+							System.out.println("Press 3 to issue book");
+							System.out.println("Press 4 to search book");
+							System.out.println("Press 5 to log out");
+							
+							    int choice1 = scanner.nextInt();
+								switch (choice1) {
+								case 1:
+									System.out.println("enter id");
+									int addId=scanner.nextInt();
+									System.out.println("enter bookname");
+									String addName=scanner.next();
+									System.out.println("enter authorname");
+									String addAuth=scanner.next();
+									System.out.println("enter publisher");
+									String addPublisher=scanner.next();
+									BooksInfo bi=new BooksInfo();
+									bi.setBookid(addId);
+									bi.setBookname(addName);
+									bi.setAuthorname(addAuth);
+									bi.setPublisher(addPublisher);
+									boolean check2=service1.addBook(bi);
+									if(check2) 
+										System.out.println("Added Book");
+									else
+										System.out.println("Book not added");
+									break;	
+								case 2:
+									System.out.println("enter id");
+									int removeId=scanner.nextInt();
+									boolean check3=service1.removeBook(removeId);
+									if(check3)
+										System.out.println("Removed Book");
+									else
+										System.out.println("Book not removed");
+									break;
+									
+								case 3:
+									System.out.println("enter id");
+									int issueId=scanner.nextInt();
+									boolean check4=service1.issueBook(issueId);
+									if(check4)
+										System.out.println("Book Issued");
+									else
+										System.out.println("Book not issued");
+									break;
+									
+								case 4:
+									System.out.println("enter id");
+									int searchId=scanner.nextInt();
+									try {
+									BooksInfo bi2=service1.searchBook(searchId);
+									System.out.println("Book searched");
+									}catch(Exception e) {
+									System.out.println("Invalid credentials");	
+									}
+									break;
+									
+								case 5:
+									doReg();
+								
+								default:
+									System.out.println("Invalid Choice");
+									break;
+								}
+							} catch (Exception e) {
+								System.out.println("Invalid Credentials");
+							}
+
+							break;
+							}while(true);
+						case 3:
+							doReg();
+							break;
+						default:
+							System.out.println("Invalid Choice");
+							break;
+						}
+					} while(true);
+
+				case 2:
+					UserService service2=Factory.getUserService();
+					do {
+						System.out.println("Press 1 to User Register");
+						System.out.println("Press 2 to Login");
+						System.out.println("3 to main");
+						int choice = scanner.nextInt();
+						switch (choice) {
+						case 1:
+							System.out.println("enter id");
+							int regId=scanner.nextInt();
+							System.out.println("enter name");
+							String regName=scanner.next();
+							System.out.println("enter password");
+							String regPassword=scanner.next();
+							UserInfo ui=new UserInfo();
+							ui.setUid(regId);
+							ui.setUname(regName);
+							ui.setUpassword(regPassword);
+							boolean check=service2.registerUser(ui);
+							if(check)
+								System.out.println("Registered");
+							else
+								System.out.println("Already user is registered");
+							break;
+
+							
+						case 2:
+							System.out.println("enter id");
+							int id=scanner.nextInt();
+							System.out.println("enter name");
+							String name=scanner.next();
+							System.out.println("enter password");
+							String password=scanner.next();
+							
+							try {
+							UserInfo authInfo=service2.authUser(name, password);
+							System.out.println("Logged In");
+							
+							System.out.println("Press 1 to search book");
+							System.out.println("Press 2 to request book");
+							System.out.println("Press 3 to borrow book");
+							System.out.println("Press 4 to main");
+
+
+								int choice2 = scanner.nextInt();
+								switch (choice2) {
+								case 1:
+									System.out.println("enter id");
+									int searchId=scanner.nextInt();
+									try {
+									BooksInfo bi2=service2.searchBooks(searchId);
+									System.out.println("Book searched");
+									}catch(Exception e) {
+									System.out.println("Invalid credentials");	
+									}
+									break;
+								case 2:
+									System.out.println("enter id");
+									int reqId=scanner.nextInt();
+									System.out.println("enter name");
+									String reqName=scanner.next();
+									System.out.println("enter password");
+									String reqPassword=scanner.next();
+									try {
+										BooksInfo bi3=service2.requestBook(reqId, reqName, reqPassword);
+										System.out.println("Book requested");
+									}catch(Exception e) {
+										System.out.println("Book not available");
+									}
+									break;
+								case 3:
+									System.out.println("enter id");
+									int borrowId=scanner.nextInt();
+									try {
+									BooksInfo bi2=service2.searchBooks(borrowId);
+									System.out.println("Book borrowed");
+									}catch(Exception e) {
+									System.out.println("Invalid credentials");	
+									}
+									break;
+							        
+								case 6:
+									doReg();
+								default:
+									break;
+								}
+							} catch (Exception e) {
+								System.out.println("Invalid Credentials");
+							}
+							break;
+
+						case 3:
+							doReg();
+						default:
+							System.out.println("Invalid Choice");
+							break;
+						}
+					} while(true);
+				}
+			}while(true);
+
+
+		
+	
+	
+}
+}

@@ -1,0 +1,87 @@
+package com.capgemini.librarymanagementsystem.dao;
+
+
+
+import com.capgemini.librarymanagementsystem.db.CommonDB;
+import com.capgemini.librarymanagementsystem.dto.AdminInfo;
+import com.capgemini.librarymanagementsystem.dto.BooksInfo;
+import com.capgemini.librarymanagementsystem.dto.UserInfo;
+import com.capgemini.librarymanagementsystem.exception.CommonException;
+
+public class AdminDAOImplementation implements AdminDAO{
+
+	@Override
+	public AdminInfo auth(String aname, String apassword) {
+		for(AdminInfo ai: CommonDB.ADMIN) {
+		if(ai.getAname().equals(aname) && ai.getApassword().equals(apassword)) {
+		return ai;	
+		}
+		}
+		throw new CommonException("Invalid Credentials");
+	}
+
+	@Override
+	public boolean registerAdmin(AdminInfo ai) {
+		for(AdminInfo ai1 : CommonDB.ADMIN) {
+		if(ai1.getAname().equals(ai.getAname())) {
+		return false;
+	}
+		}
+		CommonDB.ADMIN.add(ai);
+		return true;
+	}
+
+	@Override
+	public boolean addBook(BooksInfo bi) {
+		for(BooksInfo bi1 : CommonDB.BOOKS) {
+			if(bi1.getBookid()==bi.getBookid()) {
+				return false;
+			}
+		}
+		CommonDB.BOOKS.add(bi);
+		return true;
+	}
+
+	@Override
+	public boolean removeBook(int bid) {
+		for(BooksInfo bi : CommonDB.BOOKS) {
+			if(bi.getBookid()==bid) {
+				CommonDB.BOOKS.remove(bid);
+				return true;	
+		}
+		}
+		throw new CommonException("Book id is not available");
+	}
+
+	@Override
+	public boolean issueBook(int bid) {
+		
+		boolean bookPresent=CommonDB.BOOKS.contains(bid);
+		UserInfo ui=new UserInfo();
+		int booksBorrowed = ui.getNoOfBooks();
+		if(bookPresent) {
+			if(booksBorrowed<=3) {
+				
+				for(BooksInfo bi : CommonDB.BOOKS) {
+					if(bi.getBookid()==bid) {
+						return true;
+					}
+					ui.setNoOfBooks(booksBorrowed);
+					booksBorrowed++;
+			}
+		}
+		}
+		return false;
+	}
+
+	@Override
+	public BooksInfo searchBook(int bid) {
+		for(BooksInfo bi : CommonDB.BOOKS) {
+			if(bi.getBookid()==bid) {
+				return bi;
+			}
+		}
+		throw new CommonException("Book Not Found");
+	}
+
+}

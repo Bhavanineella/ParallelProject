@@ -1,0 +1,15 @@
+package com.capgemini.librarymanagementsystem.dao;
+
+import java.util.ArrayList;
+
+import com.capgemini.librarymanagementsystem.dto.BooksInfo;
+
+public interface BooksDAO {
+	void addBook(BooksInfo book);
+	ArrayList<BooksInfo> searchBookTitle(String bookTitle);
+	ArrayList<BooksInfo> searchBookAuthor(String bookAuthor);
+	boolean removeBook(int bId);
+	ArrayList<Integer> getBookIds();
+	ArrayList<BooksInfo> getBookInfo();
+	
+}

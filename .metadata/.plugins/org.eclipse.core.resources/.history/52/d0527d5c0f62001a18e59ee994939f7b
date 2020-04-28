@@ -1,0 +1,5 @@
+package com.capgemini.libraryManagementSystemJdbc.dao;
+
+public interface AdminDAO {
+
+}

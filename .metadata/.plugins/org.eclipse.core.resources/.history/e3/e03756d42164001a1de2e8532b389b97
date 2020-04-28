@@ -1,0 +1,13 @@
+package com.capgemini.librarymanagementsystem.dao;
+
+public interface BooksDAO {
+	void addBook(BookBean book);
+	ArrayList<BookBean> searchBookTitle(String bookTitle);
+	ArrayList<BookBean> searchBookAuthor(String bookAuthor);
+	ArrayList<BookBean> searchBookType(String bookType);
+	void updateBookPrice(int bId,double bookPrice);
+	boolean removeBook(int bId);
+	ArrayList<Integer> getBookIds();
+	ArrayList<BookBean> getBookInfo();
+	
+}

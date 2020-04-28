@@ -1,0 +1,14 @@
+package com.capgemini.libraryManagementSystemJdbc.dao;
+
+import com.capgemini.libraryManagementSystemJdbc.dto.AdminInfo;
+import com.capgemini.libraryManagementSystemJdbc.dto.BookInfo;
+
+public interface AdminDAO {
+	AdminInfo auth(String name,String password);
+	boolean registerAdmin(AdminInfo ai);
+	boolean addBook(BookInfo bi);
+	boolean removeBook(int bid);
+	boolean issueBook(int bid);
+	BookInfo searchBook(int bid);
+
+}
